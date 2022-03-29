@@ -1,20 +1,24 @@
 public class StepTracker {
 
-    static int[][] monthToData = new int[12][30];
-    static int targetStepsCount = 10000;
-    static int totalSteps;
+    int[][] monthToData = new int[12][30];
+    int targetStepsCount;
+    int totalSteps;
 
-    static void addMonthData(int monthNumber, int dayNumber, int newStepsInput) {
+    StepTracker (int stepsTarget) {
+        targetStepsCount = stepsTarget;
+    }
+
+    void addMonthData(int monthNumber, int dayNumber, int newStepsInput) {
         monthToData[monthNumber][dayNumber] = newStepsInput;
         System.out.println("Новое количество шагов за день " + (dayNumber + 1) + " месяца "
                             + monthNumber + ": " + monthToData[monthNumber][dayNumber] + ".");
     }
 
-    static void changeTargetStepsCount(int newTargetStepsCount) {
+    void changeTargetStepsCount(int newTargetStepsCount) {
         targetStepsCount = newTargetStepsCount;
     }
 
-    static void showDailySteps(int monthNumber) {
+    void showDailySteps(int monthNumber) {
         for (int i = 0; i < monthToData[monthNumber].length; i++) {
             System.out.print((i + 1) + " день: " + monthToData[monthNumber][i] + ", ");
 
@@ -25,7 +29,7 @@ public class StepTracker {
         System.out.println();
     }
 
-    static void showTotalSteps(int monthNumber) {
+    void showTotalSteps(int monthNumber) {
         totalSteps = 0;
 
         for (int i = 0; i < monthToData[monthNumber].length; i++) {
@@ -34,7 +38,7 @@ public class StepTracker {
         System.out.println("Общее количество шагов за месяц: " + totalSteps);
     }
 
-    static void showMaxSteps(int monthNumber) {
+    void showMaxSteps(int monthNumber) {
         int maxMonthSteps = 0;
 
         for (int i = 0; i < monthToData[monthNumber].length; i++) {
@@ -45,19 +49,19 @@ public class StepTracker {
         System.out.println("Максимальное пройденное количество шагов: " + maxMonthSteps);
     }
 
-    static void showAverageSteps() {
+    void showAverageSteps() {
         System.out.println("Среднее количество шагов: " + totalSteps / 30);
     }
 
-    static void showDistanceTravelled() {
+    void showDistanceTravelled() {
         System.out.println("Пройденная дистанция: " + Converter.convertDistance(totalSteps) + " км");
     }
 
-    static void showCaloriesBurned() {
+    void showCaloriesBurned() {
         System.out.println("Количество сожженных килокалорий: " + Converter.convertCalories(totalSteps));
     }
 
-    static void showBestSeries(int monthNumber) {
+    void showBestSeries(int monthNumber) {
         int series = 0;
         int maxSeries = 0;
 

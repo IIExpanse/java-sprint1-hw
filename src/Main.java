@@ -3,15 +3,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        StepTracker stepTracker = new StepTracker(10000);
+
         int userInput;
 
         while (true) {
             printMenu();
-            userInput = scanner.nextInt();
-            System.out.println();
+            userInput = checkInput(scanner);
 
             if (userInput == 1) {
-                handleDataInput(scanner);
+                handleDataInput(scanner, stepTracker);
                 System.out.println();
 
             } else if (userInput == 2) {
@@ -19,18 +20,18 @@ public class Main {
 
                 monthNumber = printMonthSelection(scanner);
 
-                StepTracker.showDailySteps(monthNumber);
-                StepTracker.showTotalSteps(monthNumber);
-                StepTracker.showMaxSteps(monthNumber);
-                StepTracker.showAverageSteps();
-                StepTracker.showDistanceTravelled();
-                StepTracker.showCaloriesBurned();
-                StepTracker.showBestSeries(monthNumber);
+                stepTracker.showDailySteps(monthNumber);
+                stepTracker.showTotalSteps(monthNumber);
+                stepTracker.showMaxSteps(monthNumber);
+                stepTracker.showAverageSteps();
+                stepTracker.showDistanceTravelled();
+                stepTracker.showCaloriesBurned();
+                stepTracker.showBestSeries(monthNumber);
                 System.out.println();
 
             } else if (userInput == 3) {
-                handleNewStepsTarget(scanner);
-                System.out.println("Новое целевое количество шагов: " + StepTracker.targetStepsCount);
+                handleNewStepsTarget(scanner, stepTracker);
+                System.out.println("Новое целевое количество шагов: " + stepTracker.targetStepsCount);
                 System.out.println();
 
             } else if (userInput == 0) {
@@ -51,7 +52,7 @@ public class Main {
         System.out.println("0 - Выйти из приложения");
     }
 
-    static void handleDataInput(Scanner scanner) {
+    static void handleDataInput(Scanner scanner, StepTracker stepTracker) {
         int monthNumber;
         int dayNumber;
         int newStepsInput;
@@ -60,29 +61,29 @@ public class Main {
 
         while (true) {
             System.out.println("Введите номер дня от 1 до 30:");
-            dayNumber = scanner.nextInt() - 1;
+
+            dayNumber = checkInput(scanner);
             System.out.println();
 
-            if (dayNumber >= 0) {
-                if (dayNumber <= 29) {
+            if (dayNumber >= 0 && dayNumber <= 29) {
                     break;
-                }
             }
-            System.out.println("Такого номера нет.");
+            System.out.println("Необходимо ввести номер дня от 1 до 30.");
         }
 
         while (true) {
             System.out.println("Введите новое количество шагов:");
-            newStepsInput = scanner.nextInt();
+
+            newStepsInput = checkInput(scanner);
             System.out.println();
 
             if (newStepsInput >= 0) {
                 break;
             }
-            System.out.println("Количество шагов не должно быть отрицательным.");
+            System.out.println("Необходимо ввести 0 или неотрицательное число.");
         }
 
-        StepTracker.addMonthData(monthNumber, dayNumber, newStepsInput);
+        stepTracker.addMonthData(monthNumber, dayNumber, newStepsInput);
     }
 
     static int printMonthSelection(Scanner scanner) {
@@ -103,34 +104,46 @@ public class Main {
         int monthNumber;
 
         while (true) {
-            monthNumber = scanner.nextInt();
 
-            if (monthNumber >= 0) {
-                if (monthNumber <= 11) {
+            monthNumber = checkInput(scanner);
+            System.out.println();
+
+            if (monthNumber >= 0 && monthNumber <= 11) {
                     break;
-                }
             }
-            System.out.println("Такого номера нет.");
+            System.out.println("Необходимо ввести номер месяца от 0 до 11.");
         }
-        System.out.println();
         return monthNumber;
     }
 
-    static void handleNewStepsTarget(Scanner scanner) {
+    static void handleNewStepsTarget(Scanner scanner, StepTracker stepTracker) {
         int newTargetStepsCount;
 
         while (true) {
             System.out.println("Введите новое целевое количество шагов:");
-            newTargetStepsCount = scanner.nextInt();
+
+            newTargetStepsCount = checkInput(scanner);
             System.out.println();
 
             if (newTargetStepsCount >= 0) {
                 break;
             }
-            System.out.println("Количество шагов не должно быть отрицательным.");
+            System.out.println("Необходимо ввести 0 или неотрицательное число.");
         }
 
-        StepTracker.changeTargetStepsCount(newTargetStepsCount);
+        stepTracker.changeTargetStepsCount(newTargetStepsCount);
+    }
+
+    static int checkInput (Scanner scanner) {
+        int testedInput = -1;
+
+        try {
+            testedInput = Integer.parseInt(scanner.next());
+        }
+        catch (NumberFormatException exception) {
+            System.out.println("Ошибка: введен текст.");
+        }
+        return testedInput;
     }
 
 }
